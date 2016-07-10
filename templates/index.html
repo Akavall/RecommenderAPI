@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+    <head>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"> </script>
+	<meta charset="UTF-8">
+	<title>Document</title>
+    </head>
+    <body>
+
+	<input type="file" id="openFile" />
+	<br>
+	<div id="inputFileContents">
+	0    
+        </div>
+	<script type="text/javascript">
+	 document.getElementById("openFile").addEventListener('change', function() {
+	    var fr = new FileReader();
+	    fr.onload = function() {
+	       if (this.result.length < 10000) {
+		  document.getElementById("inputFileContents").innerHTML = "Read File Successfully: " + this.result.length + " characters read";
+		  window.inputFileContents = this.result;
+	       } else {
+		  document.getElementById("inputFileContents").innerHTML = "ERROR: The file you are trying to upload exeeds 10000 character limit.";
+		  window.inputFileContents = "";
+	       }
+            }
+            fr.readAsText(this.files[0]);
+         })
+	</script>
+
+	<input type="button" onclick="upload()"value="Upload"><br>
+	<div id="uploaded">
+	    0
+	</div>
+
+	<!-- <input type="button" onclick="compute()"value="Compute">
+	   -->
+
+	Number of Recommendations per user : <input type="text" id="n_recs" /><input type="button" onclick="compute()"value="Generate Recs"><br>
+	<div id="computed">
+	    0
+	</div>
+        <script>
+	 function upload() {
+	    $.ajax({
+               type: 'POST',
+               url: "http://localhost:5000/upload",
+               data: window.inputFileContents,
+               success: function(data) { 
+		  document.getElementById("uploaded").innerHTML = data
+               },
+               // contentType: "application/json",
+               // dataType: 'json',
+	    });    
+
+	 }
+	</script>
+
+	<script>
+	 function compute() {
+	    var n_recs = document.getElementById("n_recs").value;
+	    $.ajax({
+	       type: 'GET',
+	       url: "http://localhost:5000/compute?n_recs=" + n_recs,
+	       success: function(data) {
+		  document.getElementById("computed").innerHTML = "Computed Scores and generated recommendations"
+		  window.outputFileContents = data
+	       }
+
+	    });
+	 }
+	</script>
+
+	<script>
+	 function download(text, name, type) {
+	    var output_file = document.getElementById("output_file");
+	    var file = new Blob([text], {type: type});
+	    output_file.href = URL.createObjectURL(file);
+	    output_file.download = name;
+	    document.getElementById("file_created").innerHTML = "File created Successfully"
+	 }
+	</script>
+
+	<button onclick="download(window.outputFileContents, 'rec_file.csv', 'text/plain')">Create Output File</button>
+	<br>
+	<div id="file_created">
+	    0
+	</div>
+	<a href="" id="output_file">click here to download your file</a>
+
+    </body>
+</html>
+
