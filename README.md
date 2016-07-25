@@ -35,7 +35,7 @@ Dan,D
 
 Above data is the same as sample_actions.csv.
 
-The RecommenderAPI will use Singular Value Decomposition algorithm to generate these recommendations:
+The RecommenderAPI will use Singular Value Decomposition algorithm to generate these recommendations. We have an option to specify any number of recommendations, we chose 3:
 
 ```
 Amy,Rust,D,C  
