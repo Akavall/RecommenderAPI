@@ -8,6 +8,13 @@ To run the application on local, just run the `run.py` file:
 python run.py
 ```
 
+and in your browser go to:
+```
+http://localhost:5000/recommender
+```
+
+You will be able to user the recommender.
+
 The action format be in long format, for example:
 
 ```
@@ -25,6 +32,8 @@ Fred,Java
 Emily,Lua
 Dan,D
 ```
+
+Above data is the same as sample_actions.csv.
 
 The RecommenderAPI will use Singular Value Decomposition algorithm to generate these recommendations:
 
